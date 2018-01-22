@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const config = require('../config/database');
 let User = require('./user');
+
+
 // Message schema
-
-
 const MessageSchema = new mongoose.Schema({
   content: {
       type: String,

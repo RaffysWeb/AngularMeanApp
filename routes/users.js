@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('../config/database');
 
-
 const User = require('../models/user');
 
 // Register

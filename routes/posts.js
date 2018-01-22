@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
+
+const Post = require("../models/post");
+const User = require("../models/user");
 const Message = require("../models/message");
 
-// Get messages
+// Get posts
 router.get("/", (req, res, next) => {
-  Message.find().exec((err, messages) => {
+  Post.find().exec((err, posts) => {
     if (err) {
       return res.json({
         success: false,
@@ -13,18 +16,20 @@ router.get("/", (req, res, next) => {
     } else {
       res.json({
         success: true,
-        obj: messages
+        obj: posts
       });
     }
   });
 });
 
-// Post new message
+// Post new post
 router.post("/", (req, res, next) => {
-  let newMessage = new Message({
-    content: req.body.message
+  let newPost = new Post({
+    user: req.body.user,
+    message: req.body.message
   });
-  Message.addMessage(newMessage, (err, message) => {
+
+  Post.addPost(newPost, (err, post) => {
     if (err) {
       res.json({
         success: false,
@@ -33,7 +38,7 @@ router.post("/", (req, res, next) => {
     } else {
       res.json({
         success: true,
-        msg: "New message added"
+        msg: "New post added"
       });
     }
   });

@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
       this.flashMessages.show('Please enter a valid email address', { cssClass: 'alert-danger', timeout: 3000 });
       return false;
     }
-    console.log(value);
+
     // Register User
     this.authService.registerUser(value).subscribe(data => {
       if (data.success) {

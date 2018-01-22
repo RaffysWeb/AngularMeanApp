@@ -22,6 +22,7 @@ mongoose.connection.on('error', (err) => {
 const app = express();
 
 const users = require('./routes/users');
+const messages = require('./routes/messages');
 
 //Port number
 const port = 3000;
@@ -30,7 +31,7 @@ const port = 3000;
 app.use(cors());
 
 //Set Static Folder
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 //Body Parser Middleware  
 app.use(bodyParser.json());
@@ -42,6 +43,7 @@ app.use(passport.session());
 require('./config/passport')(passport);
 
 app.use('/users', users);
+app.use('/messages', messages);
 
 //Index Route
 app.get('/', (req, res) => {

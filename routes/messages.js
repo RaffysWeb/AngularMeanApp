@@ -2,27 +2,41 @@ const express = require("express");
 const router = express.Router();
 const Message = require("../models/message");
 
-router.post("/post", (req, res, next) => {
-  let newMessage = new Message({
-    content: req.body.message
-  });
-
-  Message.addMessage(newMessage, (err, message) => {
+// Get messages
+router.get("/", (req, res, next) => {
+  Message.find().exec((err, messages) => {
     if (err) {
-      res.json({
+      return res.json({
         success: false,
-        msg: 'Failed to add new Message'
+        error: err
       });
     } else {
       res.json({
         success: true,
-        msg: 'New message added'
+        obj: messages
       });
     }
-  })
-
+  });
 });
 
-
+// Post new message
+router.post("/post", (req, res, next) => {
+  let newMessage = new Message({
+    content: req.body.message
+  });
+  Message.addMessage(newMessage, (err, message) => {
+    if (err) {
+      res.json({
+        success: false,
+        error: err
+      });
+    } else {
+      res.json({
+        success: true,
+        msg: "New message added"
+      });
+    }
+  });
+});
 
 module.exports = router;

@@ -21,7 +21,6 @@ export class AddPostComponent implements OnInit {
 
   constructor(
     private postService: PostService,
-    private authService: AuthService,
     private flashMessages: FlashMessagesService,
     private router: Router
   ) { }
@@ -37,22 +36,14 @@ export class AddPostComponent implements OnInit {
       return false;
     }
 
-    this.authService.getProfile().subscribe(profile => {
-      value.user = profile.user;
-      this.postService.newPost(value).subscribe(data => {
-        if (data.success) {
-          this.flashMessages.show('New Post created', {
-            cssClass: 'alert-success',
-            timeout: 3000
-          });
-          this.router.navigate(['/post/' + data._id]);
-        }
-      });
-
-    },
-      err => {
-        console.log(err);
-        return false;
-      });
+    this.postService.newPost(value).subscribe(data => {
+      if (data.success) {
+        this.flashMessages.show('New Post created', {
+          cssClass: 'alert-success',
+          timeout: 3000
+        });
+        this.router.navigate(['/post/' + data._id]);
+      }
+    });
   }
 }

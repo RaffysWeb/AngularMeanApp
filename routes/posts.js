@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require('jsonwebtoken');
 
 const Post = require("../models/post");
 const User = require("../models/user");
 const Message = require("../models/message");
+const config = require("../config/database");
 
 // Get posts
 router.get("/", (req, res, next) => {
@@ -24,6 +26,7 @@ router.get("/", (req, res, next) => {
 
 //Get single post
 router.post("/post/:id", (req, res, next) => {
+
   Post.findById(req.params.id, (err, post) => {
     if (err) {
       return res.json({
@@ -39,10 +42,23 @@ router.post("/post/:id", (req, res, next) => {
   });
 });
 
+//Protect routes
+router.use('/', (req, res, next) => {
+  jwt.verify(req.query.token, config.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({
+        title: 'Not Authenticated',
+        error: err
+      });
+    }
+    console.log(decoded);
+    next();
+  });
+});
+
+
 // Post new post
 router.post("/", (req, res, next) => {
-  console.log(req.body.user)
-
   let newPost = new Post({
     user: req.body.user,
     title: req.body.title,

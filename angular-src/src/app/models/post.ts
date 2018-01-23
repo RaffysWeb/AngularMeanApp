@@ -1,5 +1,10 @@
 export interface Post {
 title?: string;
 message?: string;
-user?: string;
+user?: {
+  name?: string;
+  username?: string;
+  email?: string;
+  password?: string;
+};
 }

@@ -3,6 +3,8 @@ import { Post } from '../../../models/post';
 import { PostService } from '../../../services/post.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-add-post',
@@ -10,6 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./add-post.component.css']
 })
 export class AddPostComponent implements OnInit {
+  user: User;
   post: Post = {
     title: undefined,
     message: undefined,
@@ -18,11 +21,12 @@ export class AddPostComponent implements OnInit {
 
   constructor(
     private postService: PostService,
+    private authService: AuthService,
     private flashMessages: FlashMessagesService,
     private router: Router
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   onSubmit({ value, valid }: { value: Post; valid: boolean }) {
     if (!valid) {
@@ -33,14 +37,22 @@ export class AddPostComponent implements OnInit {
       return false;
     }
 
-    this.postService.newPost(value).subscribe(data => {
-      if (data.success) {
-        this.flashMessages.show('New Post created', {
-          cssClass: 'alert-success',
-          timeout: 3000
-        });
-        this.router.navigate(['/post/' + data._id]);
-      }
-    });
+    this.authService.getProfile().subscribe(profile => {
+      value.user = profile.user;
+      this.postService.newPost(value).subscribe(data => {
+        if (data.success) {
+          this.flashMessages.show('New Post created', {
+            cssClass: 'alert-success',
+            timeout: 3000
+          });
+          this.router.navigate(['/post/' + data._id]);
+        }
+      });
+
+    },
+      err => {
+        console.log(err);
+        return false;
+      });
   }
 }

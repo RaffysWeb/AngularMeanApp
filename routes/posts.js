@@ -41,8 +41,10 @@ router.post("/post/:id", (req, res, next) => {
 
 // Post new post
 router.post("/", (req, res, next) => {
+  console.log(req.body.user)
+
   let newPost = new Post({
-    // user: req.body.user,
+    user: req.body.user,
     title: req.body.title,
     message: req.body.message
   });

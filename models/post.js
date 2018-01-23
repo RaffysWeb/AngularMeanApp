@@ -10,16 +10,16 @@ const PostSchema = new mongoose.Schema({
   },
   message: { 
     type: String  
-  }
+  },
   // message: {
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: 'Message'
   // }
   // ,
-  // user: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'User'
-  // }
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 const Post = module.exports = mongoose.model('Post', PostSchema)

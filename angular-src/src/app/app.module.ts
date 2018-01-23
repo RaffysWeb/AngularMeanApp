@@ -17,6 +17,10 @@ import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { AddMessageComponent } from './components/messages/add-message/add-message.component';
 import { EditMessageComponent } from './components/messages/edit-message/edit-message.component';
+import { AddPostComponent } from './components/posts/add-post/add-post.component';
+import { EditPostComponent } from './components/posts/edit-post/edit-post.component';
+import { PostService } from './services/post.service';
+import { PostComponent } from './components/posts/post/post.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +28,8 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'new-post', component: AddPostComponent},
+  { path: 'post/:id', component: PostComponent}
 
 ];
 
@@ -37,7 +43,10 @@ const appRoutes: Routes = [
     DashboardComponent,
     ProfileComponent,
     AddMessageComponent,
-    EditMessageComponent
+    EditMessageComponent,
+    AddPostComponent,
+    EditPostComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,
@@ -49,6 +58,7 @@ const appRoutes: Routes = [
   providers: [
     ValidateService,
     AuthService,
+    PostService,
     AuthGuard
   ],
   bootstrap: [AppComponent]

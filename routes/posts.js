@@ -22,10 +22,28 @@ router.get("/", (req, res, next) => {
   });
 });
 
+//Get single post
+router.post("/post/:id", (req, res, next) => {
+  Post.findById(req.params.id, (err, post) => {
+    if (err) {
+      return res.json({
+        success: false,
+        error: err
+      });
+    } else {
+      res.json({
+        success: true,
+        obj: post
+      });
+    }
+  });
+});
+
 // Post new post
 router.post("/", (req, res, next) => {
   let newPost = new Post({
-    user: req.body.user,
+    // user: req.body.user,
+    title: req.body.title,
     message: req.body.message
   });
 
@@ -38,7 +56,8 @@ router.post("/", (req, res, next) => {
     } else {
       res.json({
         success: true,
-        msg: "New post added"
+        msg: "New post added",
+        _id: post._id
       });
     }
   });

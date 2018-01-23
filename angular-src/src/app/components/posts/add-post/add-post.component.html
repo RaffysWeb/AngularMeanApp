@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-header">
+    New Post
+  </div>
+  <div class="card-body">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" name="title" [(ngModel)]="post.title" >
+        <label for="message"></label>
+        <textarea name="message" class="form-control" rows="5" [(ngModel)]="post.message" ></textarea>
+      </div>
+      <input type="submit" class="btn btn-success float-right" value="Submit">
+    </form>
+  </div>
+</div>

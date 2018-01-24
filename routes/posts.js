@@ -26,20 +26,21 @@ router.get("/", (req, res, next) => {
 
 //Get single post
 router.post("/post/:id", (req, res, next) => {
-
-  Post.findById(req.params.id, (err, post) => {
-    if (err) {
-      return res.json({
-        success: false,
-        error: err
-      });
-    } else {
-      res.json({
-        success: true,
-        obj: post
-      });
-    }
-  });
+  Post.findById(req.params.id)
+    .populate('message')
+    .exec((err, post) => {
+      if (err) {
+        return res.json({
+          success: false,
+          error: err
+        });
+      } else {
+        res.json({
+          success: true,
+          obj: post
+        });
+      }
+    });
 });
 
 //Protect routes
@@ -51,7 +52,6 @@ router.use('/', (req, res, next) => {
         error: err
       });
     }
-    console.log(decoded);
     next();
   });
 });
@@ -59,10 +59,24 @@ router.use('/', (req, res, next) => {
 
 // Post new post
 router.post("/", (req, res, next) => {
-  let newPost = new Post({
-    user: req.body.user,
+  const decoded = jwt.decode(req.query.token);
+  const newMessage = new Message({
+    content: req.body.message,
+    user: decoded.data
+  });
+  const newPost = new Post({
+    user: decoded.data,
     title: req.body.title,
-    message: req.body.message
+    message: newMessage
+  });
+
+  Message.addMessage(newMessage, (err, message) => {
+    if (err) {
+      res.json({
+        success: false,
+        error: err
+      });
+    }
   });
 
   Post.addPost(newPost, (err, post) => {
@@ -75,10 +89,54 @@ router.post("/", (req, res, next) => {
       res.json({
         success: true,
         msg: "New post added",
-        _id: post._id
+        postId: post._id,
       });
     }
   });
+});
+
+
+// Add message to post
+router.post("/post/:id/message", (req, res, next) => {
+  const decoded = jwt.decode(req.query.token);
+  const newMessage = new Message({
+    content: req.body.message,
+    user: decoded.data
+  });
+
+  Post.findById(req.params.id)
+    .exec((err, post) => {
+      if (err) {
+        res.json({
+          success: false,
+          error: err
+        });
+      } else {
+        Message.addMessage(newMessage, (err, message) => {
+          if (err) {
+            res.json({
+              success: false,
+              error: err
+            });
+          }
+        });
+        Post.addMessage(post, newMessage, (err, post) => {
+          if (err) {
+            res.json({
+              success: false,
+              error: err
+            });
+          } else {
+            console.log(post);
+            res.json({
+              success: true,
+              msg: "New message added",
+              postId: post._id  
+            });
+          }
+        })
+      }
+    });
 });
 
 module.exports = router;

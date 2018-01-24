@@ -21,10 +21,10 @@ export class PostService {
   }
 
   // Get single post
-  getPost(post) {
+  getPost(postId) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/posts/post/'  + post + this.token, { headers: headers })
+    return this.http.post('http://localhost:3000/posts/post/' + postId + this.token, { headers: headers })
       .map(res => res.json());
   }
 
@@ -35,4 +35,12 @@ export class PostService {
     return this.http.get('http://localhost:3000/posts/' + this.token, { headers: headers })
       .map(res => res.json());
   }
-}
+
+  // New Message
+  newMessage(message, postId) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/posts/post/' + postId + '/message/' + this.token, message, { headers: headers })
+      .map(res => res.json());
+  }
+  }

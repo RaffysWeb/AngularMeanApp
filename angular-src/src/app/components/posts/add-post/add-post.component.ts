@@ -15,8 +15,7 @@ export class AddPostComponent implements OnInit {
   user: User;
   post: Post = {
     title: undefined,
-    message: undefined,
-    user: undefined
+    message: undefined
   };
 
   constructor(
@@ -42,7 +41,7 @@ export class AddPostComponent implements OnInit {
           cssClass: 'alert-success',
           timeout: 3000
         });
-        this.router.navigate(['/post/' + data._id]);
+        this.router.navigate(['/post/' + data.postId]);
       }
     });
   }

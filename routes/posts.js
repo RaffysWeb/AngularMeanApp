@@ -69,7 +69,7 @@ router.post("/", (req, res, next) => {
     title: req.body.title,
     message: newMessage
   });
-
+  
   Message.addMessage(newMessage, (err, message) => {
     if (err) {
       res.json({
@@ -77,22 +77,44 @@ router.post("/", (req, res, next) => {
         error: err
       });
     }
+    
+    Post.addPost(newPost, (err, post) => {
+      if (err) { 
+        res.json({
+          success: false,
+          error: err
+        });
+      } 
+
+      User.findById(decoded.data._id)
+      .exec((err, user) => {
+        if (err) {
+          res.json({
+            success: false,
+            error: err
+          });
+        } else {
+          User.addPost(user, newPost, newMessage, (err, user) => {
+            if (err) {
+              res.json({
+                success: false,
+                error: 'err'
+              });
+            } else {
+              res.json({
+                success: true,
+                msg: "User updated",
+                postId: post._id
+              });
+            }
+          })
+        }
+      });    
+    });
   });
 
-  Post.addPost(newPost, (err, post) => {
-    if (err) {
-      res.json({
-        success: false,
-        error: err
-      });
-    } else {
-      res.json({
-        success: true,
-        msg: "New post added",
-        postId: post._id,
-      });
-    }
-  });
+ 
+  
 });
 
 
@@ -120,6 +142,7 @@ router.post("/post/:id/message", (req, res, next) => {
             });
           }
         });
+
         Post.addMessage(post, newMessage, (err, post) => {
           if (err) {
             res.json({
@@ -127,11 +150,29 @@ router.post("/post/:id/message", (req, res, next) => {
               error: err
             });
           } else {
-            console.log(post);
-            res.json({
-              success: true,
-              msg: "New message added",
-              postId: post._id  
+            User.findById(decoded.data._id)
+            .exec((err, user) => {
+              if (err) {
+                res.json({
+                  success: false,
+                  error: err
+                });
+              } else {
+                User.addMessage(user, newMessage, (err, user) => {
+                  if (err) {
+                    res.json({
+                      success: false,
+                      error: 'err'
+                    });
+                  } else {
+                    res.json({
+                      success: true,
+                      msg: "User updated",
+                      postId: post._id
+                    });
+                  }
+                })
+              }
             });
           }
         })

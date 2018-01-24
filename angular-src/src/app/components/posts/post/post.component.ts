@@ -39,9 +39,17 @@ export class PostComponent implements OnInit {
       this.flashMessages.show('Please enter a valid message', { cssClass: 'alert-danger', timeout: 3000 });
       return false;
     }
+    this.reply = false;
+
     this.postService.newMessage(value, this._id).subscribe(data => {
-      console.log(data);
+      this.flashMessages.show('New message added', { cssClass: 'alert-success', timeout: 3000 });
+      this.postService.getPost(this._id).subscribe(newData => {
+        this.post = newData.obj;
+        this.messages = newData.obj.message;
+      });
     });
+
+
   }
 
   scroll(el) {

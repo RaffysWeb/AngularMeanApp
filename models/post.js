@@ -18,7 +18,7 @@ const PostSchema = new mongoose.Schema({
   }
 });
 
-const Post = module.exports = mongoose.model('Post', PostSchema)
+const Post = module.exports = mongoose.model('Post', PostSchema);
 
 module.exports.addPost = function (newPost, callback) {
   newPost.message.push();
@@ -29,3 +29,4 @@ module.exports.addMessage = function (post, newMessage, callback) {
   post.message.push(newMessage);
   post.save(callback);
 }
+

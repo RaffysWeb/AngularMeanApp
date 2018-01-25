@@ -123,7 +123,8 @@ router.post("/post/:id/message", (req, res, next) => {
   const decoded = jwt.decode(req.query.token);
   const newMessage = new Message({
     content: req.body.message,
-    user: decoded.data
+    user: decoded.data,
+    post: req.params.id
   });
 
   Post.findById(req.params.id)
@@ -178,6 +179,37 @@ router.post("/post/:id/message", (req, res, next) => {
         })
       }
     });
+});
+
+// Delete Message
+
+router.delete('/message/:id', (req, res, next) => {
+  Message.findById(req.params.id, (err, message) => {
+    if (err) {
+      res.json({
+        success: false,
+        error: err
+      });
+    } else {
+      User.findById(message.user, (err, user) => {
+        user.messages.pull(message);
+        user.save();
+      })
+      message.remove((err, result) => {
+        if (err) {
+          res.json({
+            success: false,
+            error: err
+          });
+        } else {
+          res.json({
+            success: true,
+            msg: result
+          })
+        }
+      });
+    }
+  });
 });
 
 module.exports = router;

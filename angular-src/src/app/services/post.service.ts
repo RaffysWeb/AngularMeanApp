@@ -43,4 +43,12 @@ export class PostService {
     return this.http.post('http://localhost:3000/posts/post/' + postId + '/message/' + this.token, message, { headers: headers })
       .map(res => res.json());
   }
+
+  // Delete Message
+  deleteMessage(message) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.delete('http://localhost:3000/posts/message/' + message + this.token, {headers: headers})
+      .map(res => res.json());
+  }
   }

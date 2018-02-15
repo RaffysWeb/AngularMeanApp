@@ -1,34 +1,49 @@
-<div class="row">
+<div class="row h-100 justify-content-center align-items-center">
   <div class="col-md-10">
-    <strong>{{ post?.title }}</strong>
-    <div *ngFor="let message of messages" class="message" class="messages">
-      <div>
-        <p>{{message?.content}}</p>
+    <h3 id="postTitle">{{ post?.title }}</h3>
+    <div *ngFor="let message of messages" class="messages">
+      <div class="message">
+        <div>
+          <h5>Posted by {{message?.user.username}}</h5>
+        </div>
+        <div>
+          <p>{{message?.content}}</p>
+        </div>
       </div>
-      <a (click)="(reply = !reply) (scroll(replyForm))" class="float-right btn btn-link btn-sm">
-        <i class="fa-arrow-down"></i>
-        Reply
-      </a>
-      <div class="btn-group">
-        <a class="btn btn-link btn-sm">
-          <i class="fa fa-pencil"></i>
-          Edit
-        </a>
-        <button type="button" class="btn btn-link btn-sm" (click)="onDelete(message._id)">
-          <i class="fa fa-trash" ></i>
-          Delete
-        </button>
+      <div class="row h-100 justify-content-center ">
+        <div class="col-md-12">
+          <span *ngIf="!reply" id="reply">
+            <a *ngIf="user!=null" (click)="(reply = !reply) (scroll(replyForm))" class="btn btn-link btn-sm">
+              <i class="fa-arrow-down"></i>
+              Reply
+            </a>
+          </span>
+          <div *ngIf="user!=null && message.user._id===user.id" class="btn-group">
+            <button type="button" class="btn btn-link btn-sm" (click)="onEdit(message._id) && message?.content=">
+              <i class="fa fa-pencil"></i>
+              Edit
+            </button>
+            <button type="button" class="btn btn-link btn-sm" (click)="onDelete(message._id)">
+              <i class="fa fa-trash"></i>
+              Delete
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- Reply form -->
-<div #replyForm>
-  <form *ngIf="reply" #f="ngForm" (ngSubmit)="onSubmit(f)">
-    <div class="form-group">
-      <textarea rows="5" placeholder="Message" class="form-control" [(ngModel)]="message" name="message"></textarea>
-      <input type="submit" class="btn btn-primary btn-block" value="Submit">
+<div id="replyForm" class="row h-100 justify-content-center ">
+  <div class="col-md-10">
+    <div #replyForm>
+      <form *ngIf="reply" #f="ngForm" (ngSubmit)="onSubmit(f)">
+        <div class="form-group">
+          <textarea rows="5" placeholder="Message" class="form-control" [(ngModel)]="message" name="message"></textarea>
+          <input type="submit" class="btn btn-primary btn-block" value="Submit">
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </div>

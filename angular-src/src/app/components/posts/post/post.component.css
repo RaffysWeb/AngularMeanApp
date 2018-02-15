@@ -1,0 +1,26 @@
+.messages {
+  margin: 10px 0;
+  background-color: #ffffff;
+  border-radius: 5px;
+  min-height: 150px;
+
+}
+.message {
+  min-height: inherit;
+  margin: 10px 0;
+  padding: 10px 20px;
+}
+.message h5 {
+ font-weight: bolder;
+}
+#reply {
+float: right
+}
+
+#postTitle {
+  margin-left: 15px;
+}
+
+#replyForm{
+  padding-bottom: 50px;
+}

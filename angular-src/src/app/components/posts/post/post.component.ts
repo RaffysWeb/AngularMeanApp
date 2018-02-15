@@ -13,10 +13,12 @@ import { Message } from '../../../models/message';
 })
 export class PostComponent implements OnInit {
   _id: string;
+  user: string;
   post: Post;
   messages: Message[];
   message: Message;
   reply = false;
+  edit = false;
 
   constructor(
     private router: Router,
@@ -27,11 +29,8 @@ export class PostComponent implements OnInit {
 
   ngOnInit() {
     this._id = this.route.snapshot.params['id'];
-
-    this.postService.getPost(this._id).subscribe(data => {
-      this.post = data.obj;
-      this.messages = data.obj.message;
-    });
+    this.user = JSON.parse(localStorage.getItem('user'));
+    this.getMessages();
   }
 
   onSubmit({ value, valid }: { value: Message, valid: boolean }) {
@@ -41,10 +40,7 @@ export class PostComponent implements OnInit {
     }
     this.postService.newMessage(value, this._id).subscribe(data => {
       this.flashMessages.show('New message added', { cssClass: 'alert-success', timeout: 3000 });
-      this.postService.getPost(this._id).subscribe(newData => {
-        this.post = newData.obj;
-        this.messages = newData.obj.message;
-      });
+      this.getMessages();
     });
 
     this.reply = false;
@@ -54,12 +50,24 @@ export class PostComponent implements OnInit {
   onDelete(message) {
     this.postService.deleteMessage(message)
       .subscribe(result => {
-        this.postService.getPost(this._id).subscribe(newData => {
-          this.post = newData.obj;
-          this.messages = newData.obj.message;
-        });
+        this.getMessages();
+        this.flashMessages.show('Message deleted', { cssClass: 'alert-success', timeout: 3000 });
       });
   }
+
+  onEdit(message) {
+    this.edit = !this.edit;
+    console.log(message);
+  }
+
+  getMessages() {
+    this.postService.getPost(this._id).subscribe(newData => {
+      this.post = newData.obj;
+      this.messages = newData.obj.message;
+      return this.user;
+    });
+  }
+
 
   scroll(el) {
     el.scrollIntoView({ behavior: 'smooth' });

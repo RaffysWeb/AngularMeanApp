@@ -7,19 +7,21 @@
           <h5>Posted by {{message?.user.username}}</h5>
         </div>
         <div>
-          <p>{{message?.content}}</p>
+          <!-- code for contenteditable -->
+          <!-- #el [attr.contenteditable]="contenteditable" (blur)="text=el.message?.content" -->
+          <p>{{message?.content}}</p> 
         </div>
       </div>
       <div class="row h-100 justify-content-center ">
         <div class="col-md-12">
           <span *ngIf="!reply" id="reply">
             <a *ngIf="user!=null" (click)="(reply = !reply) (scroll(replyForm))" class="btn btn-link btn-sm">
-              <i class="fa-arrow-down"></i>
+              <i class="fa fa-arrow-down"></i>
               Reply
             </a>
           </span>
           <div *ngIf="user!=null && message.user._id===user.id" class="btn-group">
-            <button type="button" class="btn btn-link btn-sm" (click)="onEdit(message._id) && message?.content=">
+            <button type="button" class="btn btn-link btn-sm" (click)="onEdit(message._id)">
               <i class="fa fa-pencil"></i>
               Edit
             </button>

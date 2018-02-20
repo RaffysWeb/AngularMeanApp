@@ -1,3 +1,16 @@
-<p>
-  edit-message works!
-</p>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+      <header>
+        <h3>Edit your message</h3>
+      </header>
+      <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+        <div class="form-group">
+          <textarea rows="5" placeholder="Message" class="form-control" [(ngModel)]="message.content" name="content"></textarea>
+          <input type="submit" class="btn btn-primary btn-block" value="Submit">
+          <input type="button" class="btn btn-danger btn-block" [routerLink]="['/post/' + postId]" value="Cancel">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

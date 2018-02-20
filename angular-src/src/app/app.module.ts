@@ -29,7 +29,8 @@ const appRoutes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'new-post', component: AddPostComponent},
-  { path: 'post/:id', component: PostComponent}
+  { path: 'post/:id', component: PostComponent},
+  { path: 'post/:id/message/:id ', component: EditMessageComponent}
 
 ];
 

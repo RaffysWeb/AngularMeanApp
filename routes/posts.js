@@ -126,8 +126,6 @@ router.post("/", (req, res, next) => {
   });
 });
 
-
-
 // Add message to post
 router.post("/post/:id/message", (req, res, next) => {
   const decoded = jwt.decode(req.query.token);
@@ -191,6 +189,63 @@ router.post("/post/:id/message", (req, res, next) => {
     });
 });
 
+// Get Message
+router.get("/message/:id", (req, res, next) => {
+  Message.findById(req.params.id)
+    .exec((err, message) => {
+      if (err) {
+        return res.json({
+          success: false,
+          error: err
+        });
+      } else {
+        res.json({
+          success: true,
+          obj: message
+        });
+      }
+    });
+});
+
+// Edit Message
+router.patch('/message/:id', function (req, res, next) {
+  let decoded = jwt.decode(req.query.token);
+  Message.findById(req.params.id, function (err, message) {
+    if (err) {
+      return res.json({
+        success: false,
+        error: err
+      });
+    }
+    if (!message) {
+      return res.json({
+        success: false,
+        error: err
+      });
+    }
+    if (message.user != decoded.data._id) {
+      return res.json({
+        success: false,
+        error: err
+      });
+    }
+    message.content = req.body.content;
+    message.save(function (err, message) {
+      if (err) {
+        return res.json({
+          success: false,
+          error: err
+        });
+      }
+      res.json({
+        success: true,
+        obj: message
+      });
+    });
+  });
+});
+
+
 // Delete Message
 router.delete('/message/:id', (req, res, next) => {
   let decoded = jwt.decode(req.query.token);
@@ -227,5 +282,9 @@ router.delete('/message/:id', (req, res, next) => {
     }
   });
 });
+
+
+
+
 
 module.exports = router;

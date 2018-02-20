@@ -18,7 +18,6 @@ export class PostComponent implements OnInit {
   messages: Message[];
   message: Message;
   reply = false;
-  edit = false;
 
   constructor(
     private router: Router,
@@ -56,8 +55,7 @@ export class PostComponent implements OnInit {
   }
 
   onEdit(message) {
-    this.edit = !this.edit;
-    console.log(message);
+    this.router.navigate(['post/' + this._id + '/message/' + message]);
   }
 
   getMessages() {

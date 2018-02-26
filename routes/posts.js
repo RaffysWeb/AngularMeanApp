@@ -27,7 +27,8 @@ router.get("/", (req, res, next) => {
         });
       }
     });
-});
+    
+  });
 
 //Get single post
 router.post("/post/:id", (req, res, next) => {
@@ -282,9 +283,6 @@ router.delete('/message/:id', (req, res, next) => {
     }
   });
 });
-
-
-
 
 
 module.exports = router;

@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { tokenNotExpired } from 'angular2-jwt';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class AuthService {
+  loggedInUser = new Subject;
   authToken: any;
   user: any;
 
@@ -25,7 +27,10 @@ export class AuthService {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     return this.http.post('http://localhost:3000/users/authenticate', user, { headers: headers })
-      .map(res => res.json());
+      .map(res => {
+        this.loggedInUser.next(res.json().user.username);
+        return res.json();
+      });
   }
 
   getProfile() {
@@ -33,7 +38,6 @@ export class AuthService {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', this.authToken);
-
     return this.http.get('http://localhost:3000/users/profile', { headers: headers })
       .map(res => res.json());
   }
@@ -50,9 +54,9 @@ export class AuthService {
     this.authToken = 'JWT ' + token;
   }
 
-loggedIn() {
-  return tokenNotExpired('id_token');
-}
+  loggedIn() {
+    return tokenNotExpired('id_token');
+  }
 
   logout() {
     this.authToken = null;

@@ -4,6 +4,7 @@ import { PostService } from '../../../services/post.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Post } from '../../../models/post';
 import { Message } from '../../../models/message';
+import { AuthService } from '../../../services/auth.service';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { Message } from '../../../models/message';
 })
 export class PostComponent implements OnInit {
   _id: string;
-  user: string;
+  user: any;
   post: Post;
   messages: Message[];
   message: Message;
@@ -23,6 +24,7 @@ export class PostComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private postService: PostService,
+    private authService: AuthService,
     private flashMessages: FlashMessagesService
   ) { }
 
